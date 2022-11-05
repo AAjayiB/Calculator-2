@@ -56,7 +56,7 @@ def testCalculate():
     assert calculate("-2*-2")=="4"
     assert calculate("2*-2")=="-4"
     assert calculate("-2*3")=="-6"
-    assert calculate("3--2")="5"
+    assert calculate("3--2")=="5"
 
     # Tests for consecutive operators
     assert calculate("2+++2")==CONSECUTIVE_OPERATORS_ERROR
