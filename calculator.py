@@ -1,9 +1,10 @@
 import re
 
 CONSECUTIVE_OPERATORS ="Invalid string, contains consecutive operators"
-
+l = "log"
 def calculate(exp):
     answer=""
+
     if exp:
         # checks for any non operators or digits
         if not re.search(r"[^\d\+\-\*]",exp):
@@ -36,15 +37,20 @@ def calculate(exp):
 
                     while (validExpression.count("-") > 0):
                         opIndex = validExpression.index("-")
-                        if validExpression[opIndex+1]=="-" or validExpression[opIndex+1]=="+":
+                        print(validExpression)
+                        if validExpression[opIndex+1]=="+":
                             return CONSECUTIVE_OPERATORS
-                        if validExpression[opIndex-1]=="+":
-                            validExpression.pop(opIndex-1)
+                        if validExpression[opIndex+1]=="-" and (validExpression[opIndex+2]=="-" or validExpression[opIndex+2]=="+"):
+                            return CONSECUTIVE_OPERATORS
                         else:
+                            validExpression[opIndex:opIndex+2]="+"
+                            print(validExpression)
+                        if validExpression[opIndex]=="-":
                             computedValue = int(validExpression[opIndex-1])-int(validExpression[opIndex+1])
                             validExpression[opIndex-1] = computedValue
                             validExpression.pop(opIndex+1)
                             validExpression.pop(opIndex)
+                        
                     
                     while (validExpression.count("+") > 0):
                         opIndex = validExpression.index("+")
@@ -70,6 +76,11 @@ def calculate(exp):
 def Main():
     print("Enter an expression")
     print(calculate(input()))
+    # r=re.search(r"log","shsudflogfjswi")
+    # if r():
+    #     print("is there")
+    # else:
+
 
 if __name__=="__main__":
     Main()
