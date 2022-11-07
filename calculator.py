@@ -88,9 +88,6 @@ def calculate(exp):
                     while (validExpression.count("*") > 0):
                         opIndex = validExpression.index("*")
 
-                        if validExpression[opIndex + 1] == "-":
-                            validExpression[opIndex + 1:opIndex + 3] = [
-                                "".join(validExpression[opIndex + 1:opIndex + 3])]
                         computedValue = float(validExpression[opIndex - 1]) * float(validExpression[opIndex + 1])
                         validExpression[opIndex - 1] = computedValue
                         validExpression.pop(opIndex + 1)
@@ -98,8 +95,6 @@ def calculate(exp):
 
                     while (validExpression.count("-") > 0):
                         opIndex = validExpression.index("-")
-                        if validExpression[opIndex + 1] == "-":
-                            validExpression[opIndex:opIndex + 2] = "+"
                         if validExpression[opIndex] == "-":
                             computedValue = float(validExpression[opIndex - 1]) - float(validExpression[opIndex + 1])
                             validExpression[opIndex - 1] = computedValue
