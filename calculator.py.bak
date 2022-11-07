@@ -65,7 +65,7 @@ def calculate(exp):
                         
                     while (validExpression.count("&") > 0):
                         opIndex = validExpression.index("&")
-                        computedValue = math.exp(float(validExpression[opIndex+1]))
+                        computedValue = (math.exp(float(validExpression[opIndex+1])))
                         validExpression.pop(opIndex)
                         validExpression[opIndex] = computedValue
 
