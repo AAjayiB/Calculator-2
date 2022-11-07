@@ -42,9 +42,14 @@ def calculate(exp):
                             return CONSECUTIVE_OPERATORS
                         if validExpression[opIndex+1]=="-" and (validExpression[opIndex+2]=="-" or validExpression[opIndex+2]=="+"):
                             return CONSECUTIVE_OPERATORS
+                        elif validExpression[opIndex-1]=="+" and (validExpression[opIndex-2]=="-" or validExpression[opIndex-2]=="+"):
+                            CONSECUTIVE_OPERATORS
+                        elif validExpression[opIndex-1]=="+":
+                            validExpression[opIndex-1:opIndex+1]="-"
                         elif validExpression[opIndex+1]=="-":
                             validExpression[opIndex:opIndex+2]="+"
                             print(validExpression)
+                         
                         if validExpression[opIndex]=="-":
                             computedValue = int(validExpression[opIndex-1])-int(validExpression[opIndex+1])
                             validExpression[opIndex-1] = computedValue
