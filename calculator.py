@@ -42,7 +42,7 @@ def calculate(exp):
                             return CONSECUTIVE_OPERATORS
                         if validExpression[opIndex+1]=="-" and (validExpression[opIndex+2]=="-" or validExpression[opIndex+2]=="+"):
                             return CONSECUTIVE_OPERATORS
-                        else:
+                        elif validExpression[opIndex+1]=="-":
                             validExpression[opIndex:opIndex+2]="+"
                             print(validExpression)
                         if validExpression[opIndex]=="-":
