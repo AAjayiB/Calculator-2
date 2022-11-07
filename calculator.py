@@ -6,7 +6,7 @@ ERROR_MESSAGES = ["No input was entered.", "Not a valid input", "Expression cann
 l = "log"
 
 
-def calculate(exp):
+def evaluate(exp):
     answer = (0, "")
 
     if exp:
@@ -14,6 +14,14 @@ def calculate(exp):
             return -1, ERROR_MESSAGES[1]
         exp = exp.replace("log(", "$(")
         exp = exp.replace("exp(", "&(")
+        answer = calculate(exp)
+    else:
+        answer = (-1, ERROR_MESSAGES[0])
+    return answer
+def calculate(exp):
+    answer = (0, "")
+
+    if exp:
         # checks for any non operators or digits
         if not re.search(r"[^\d+\-\*\(\)/\$\&\.]", exp):
             # checks for expressions beginning only with a single minus or not
@@ -117,12 +125,13 @@ def calculate(exp):
 
 
 def Main():
-    print("Enter an expression")
-    result = calculate((input()))
-    if result[1] == "":
-        print(result[0])
-    else:
-        print(result[1])
+    while(True):
+        print("Enter an expression")
+        result = evaluate(input())
+        if result[1] == "":
+            print(result[0])
+        else:
+            print(result[1])
     # r=re.search(r"log","shsudflogfjswi")
     # if r():
     #     print("is there")
