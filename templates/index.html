@@ -4,18 +4,27 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <style>
+        body {background-color: rgb(188, 227, 227);}
+        .header { background-color: coral; height: 70px; border-style: solid; border-width: 2px; border-color: black;
+        font-size: 50px; text-align: center; margin-bottom: 20px; font-family: sans-serif;}
+        .calculator { width: 400px; margin: auto;}
+    </style>
+    <title>Calculator</title>
 </head>
 <body>
-    <form action="/result" method="POST">
-        <input type="text" name="expression" id="expression" >
-        <input type="submit" value="submit">
+    <div class="header">Calculator Web App</div>
+    <div class="calculator">
+        <form action="/result" method="POST">
+            
+            <label for="expression">Enter an expression</label>
+            <input type="text" name="expression" id="expression"value="{{ result }}">
+            <input type="submit" value="Calculate">
+            <p name="history">Previous expression: {{expression}}</p>
+            
+        
 
-    
-
-    </form>
-    {% if result %}
-    <h1> {{ result }} </h1>
-    {% endif %}
+        </form>
+    </div>
 </body>
 </html>
