@@ -4,7 +4,6 @@ INVALID_INPUT_ERROR = "Not a valid input"
 OPERATION_END_ERROR = "Expression cannot end with an operation"
 OPERATION_BEGIN_ERROR = "Expression cannot begin with an operation"
 CONSECUTIVE_OPERATORS_ERROR = "Invalid string, contains consecutive operators"
-DIVIDE_BY_ZERO_ERROR = "Cannot divide by zero"
 def testCalculate():
     # Test for no string input
     assert calculate("")==NO_INPUT_ERROR
@@ -66,6 +65,4 @@ def testCalculate():
     assert calculate("2-+2")==CONSECUTIVE_OPERATORS_ERROR
     assert calculate("2*+2")==CONSECUTIVE_OPERATORS_ERROR
 
-    # Tests for divison by 0
-    assert calculate("5/0")==DIVIDE_BY_ZERO_ERROR
-    assert calculate("12/(10-10)")==DIVIDE_BY_ZERO_ERROR
+
