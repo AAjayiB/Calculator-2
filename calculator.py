@@ -1,127 +1,161 @@
-import re
+import re, math
 
-CONSECUTIVE_OPERATORS ="Invalid string, contains consecutive operators"
+ERROR_MESSAGES = ["No input was entered.", "Not a valid input", "Misplaced operators",
+                  "Invalid string, contains consecutive operators", "Expression has mismatched brackets",
+                  "Cannot divide by zero"]
 l = "log"
+
+
 def calculate(exp):
-    answer=""
-    exp = exp.replace(" ","")
+    answer = (0, "")
+
+    if exp:
+        if re.search(r"[$&]", exp):
+            return ERROR_MESSAGES[1]
+        exp = exp.replace("log(", "$(")
+        exp = exp.replace("exp(", "&(")
+        answer = evaluate(exp)
+    else:
+        answer = (-1, ERROR_MESSAGES[0])
+    if answer[1] == "":
+        return round(float(answer[0]), 3)
+    else:
+        return answer[1]
+
+
+def evaluate(exp):
+    answer = (0, "")
+    exp = exp.replace(" ", "")
 
     if exp:
         # checks for any non operators or digits
-        if not re.search(r"[^\d\+\-\*\/\^]",exp):
-            # checks for expressions beginning only with a single minus or not
-            if re.search(r"^\-?\d",exp):
-                # checks for expressions ending with only digits 
-                if re.search(r"\d$", exp):
+        if not re.search(r"[^\d+\-\*\^\(\)/\$\&\.]", exp):
+            # checks for expressions beginning only with a opening bracket,single minus or not, and ends with a digit or closing bracket
+            if re.search(r"^\-?\d|\(", exp) and re.search(r"\d$|\)$", exp):
+                # checks for expressions ending with only digits
+                if re.search(r"\d|\)$", exp):
                     ############# ACTUAL OPERATIONS #############
-                    validExpression = re.findall(r"\d+|[\+\-\*\/\^]", exp)
+                    validExpression = re.findall(r"\d+\.?\d*|[+\-\*\^\(\)/\$\&]", exp)
                     ############# Here at the moment
-                    if validExpression[0] =="-":
-                        validExpression[0:2]=["".join(validExpression[0:2])]
+                    if validExpression[0] == "-":
+                        validExpression[0:2] = ["".join(validExpression[0:2])]
+
+                    toPop = []
+                    toInsert = []
+                    for i, j in enumerate(validExpression[:-1]):
+                        operators = ["+", "*", "/", "^", "-"]
+                        if j in operators:
+                            nextValue = validExpression[i + 1]
+                            if nextValue in operators:
+                                if nextValue == "-" and validExpression[i + 2] not in operators:
+                                    validExpression[i + 2] = "-" + validExpression[i + 2]
+                                    toPop.append(i + 1)
+                                else:
+                                    return -1, ERROR_MESSAGES[3]
+                        elif j != "(" and j != "&" and j != "$" and validExpression[i + 1] != ")" and \
+                                validExpression[i + 1] not in operators:
+                            toInsert.insert(0, i + 1)
+                    for i in toPop:
+                        validExpression.pop(i)
+                    for i in toInsert:
+                        validExpression.insert(i, "*")
+
+                    while (validExpression.count("(") > 0):
+                        opIndex = validExpression.index("(")
+                        counter = 1
+                        otherCounter = 1
+                        inBrackets = ""
+                        for i in validExpression[opIndex + 1:]:
+                            otherCounter += 1
+                            if i == '(':
+                                counter += 1
+                            if i == ')':
+                                counter -= 1
+                            if counter == 0:
+                                result = evaluate(inBrackets)
+                                if result[1] != "":
+                                    return result
+                                break
+                            inBrackets = inBrackets + i
+                        if counter != 0:
+                            return [-1, ERROR_MESSAGES[4]]
+                        for i in range(otherCounter):
+                            validExpression.pop(opIndex)
+                        validExpression.insert(opIndex, result[0])
+
+                    while (validExpression.count("$") > 0):
+                        opIndex = validExpression.index("$")
+                        computedValue = math.log(float(validExpression[opIndex + 1]))
+                        validExpression.pop(opIndex)
+                        validExpression[opIndex] = computedValue
+
+                    while (validExpression.count("&") > 0):
+                        opIndex = validExpression.index("&")
+                        computedValue = math.exp(float(validExpression[opIndex + 1]))
+                        validExpression.pop(opIndex)
+                        validExpression[opIndex] = computedValue
 
                     while (validExpression.count("^") > 0):
                         opIndex = validExpression.index("^")
-                        if validExpression[opIndex-1]=="+" or validExpression[opIndex-1]=="-" or validExpression[opIndex-1]=="/" or validExpression[opIndex-1]=="^": 
-	                        return CONSECUTIVE_OPERATORS
-                        if (validExpression[opIndex+1]=="+" or validExpression[opIndex+1]=="*" or validExpression[opIndex+1]=="/" or validExpression[opIndex+1]=="^"):
-                            return CONSECUTIVE_OPERATORS
-                        if (validExpression[opIndex+1]=="+" or validExpression[opIndex+1]=="*") and (validExpression[opIndex+2]=="+" or validExpression[opIndex+2]=="-" or validExpression[opIndex+2]=="*" or validExpression[opIndex+2]=="/" or validExpression[opIndex+2]=="^"): 
-	                        return CONSECUTIVE_OPERATORS
-                        if validExpression[opIndex+1] =="-" and (validExpression[opIndex+2]=="+" or validExpression[opIndex+2]=="-" or validExpression[opIndex+2]=="*" or validExpression[opIndex+2]=="/" or validExpression[opIndex+2]=="^"): 
-	                        return CONSECUTIVE_OPERATORS
-                        if validExpression[opIndex+1] =="-":
-                            validExpression[opIndex+1:opIndex+3] = ["".join(validExpression[opIndex+1:opIndex+3])]
-                        computedValue = int(validExpression[opIndex-1])**int(validExpression[opIndex+1])
-                        validExpression[opIndex-1] = computedValue
-                        validExpression.pop(opIndex+1)
+                        computedValue = float(validExpression[opIndex - 1]) ** float(validExpression[opIndex + 1])
+                        validExpression[opIndex - 1] = computedValue
+                        validExpression.pop(opIndex + 1)
                         validExpression.pop(opIndex)
 
                     while (validExpression.count("/") > 0):
                         opIndex = validExpression.index("/")
-                        if validExpression[opIndex-1]=="+" or validExpression[opIndex-1]=="-" or validExpression[opIndex-1]=="/": 
-	                        return CONSECUTIVE_OPERATORS
-                        if (validExpression[opIndex+1]=="+" or validExpression[opIndex+1]=="*" or validExpression[opIndex+1]=="/"):
-                            return CONSECUTIVE_OPERATORS
-                        if (validExpression[opIndex+1]=="+" or validExpression[opIndex+1]=="*") and (validExpression[opIndex+2]=="+" or validExpression[opIndex+2]=="-" or validExpression[opIndex+2]=="*" or validExpression[opIndex+2]=="/"): 
-	                        return CONSECUTIVE_OPERATORS
-                        if validExpression[opIndex+1] =="-" and (validExpression[opIndex+2]=="+" or validExpression[opIndex+2]=="-" or validExpression[opIndex+2]=="*" or validExpression[opIndex+2]=="/"): 
-	                        return CONSECUTIVE_OPERATORS
-                        if validExpression[opIndex+1] =="-":
-                            validExpression[opIndex+1:opIndex+3] = ["".join(validExpression[opIndex+1:opIndex+3])]
-                        computedValue = int(validExpression[opIndex-1])/int(validExpression[opIndex+1])
-                        validExpression[opIndex-1] = computedValue
-                        validExpression.pop(opIndex+1)
+                        if float(validExpression[opIndex + 1]) == 0.0:
+                            return (1, ERROR_MESSAGES[5])
+                        computedValue = float(validExpression[opIndex - 1]) / float(validExpression[opIndex + 1])
+                        validExpression[opIndex - 1] = computedValue
+                        validExpression.pop(opIndex + 1)
                         validExpression.pop(opIndex)
 
                     while (validExpression.count("*") > 0):
                         opIndex = validExpression.index("*")
-                        if validExpression[opIndex-1]=="+" or validExpression[opIndex-1]=="-": 
-	                        return CONSECUTIVE_OPERATORS
-                        if (validExpression[opIndex+1]=="+" or validExpression[opIndex+1]=="*"):
-                            return CONSECUTIVE_OPERATORS
-                        if (validExpression[opIndex+1]=="+" or validExpression[opIndex+1]=="*") and (validExpression[opIndex+2]=="+" or validExpression[opIndex+2]=="-" or validExpression[opIndex+2]=="*"): 
-	                        return CONSECUTIVE_OPERATORS
-                        if validExpression[opIndex+1] =="-" and (validExpression[opIndex+2]=="+" or validExpression[opIndex+2]=="-" or validExpression[opIndex+2]=="*"): 
-	                        return CONSECUTIVE_OPERATORS
-                        if validExpression[opIndex+1] =="-":
-                            validExpression[opIndex+1:opIndex+3] = ["".join(validExpression[opIndex+1:opIndex+3])]
-                        computedValue = int(validExpression[opIndex-1])*int(validExpression[opIndex+1])
-                        validExpression[opIndex-1] = computedValue
-                        validExpression.pop(opIndex+1)
+                        computedValue = float(validExpression[opIndex - 1]) * float(validExpression[opIndex + 1])
+                        validExpression[opIndex - 1] = computedValue
+                        validExpression.pop(opIndex + 1)
                         validExpression.pop(opIndex)
 
                     while (validExpression.count("-") > 0):
                         opIndex = validExpression.index("-")
-                        print(validExpression)
-                        if validExpression[opIndex+1]=="+":
-                            return CONSECUTIVE_OPERATORS
-                        if validExpression[opIndex+1]=="-" and (validExpression[opIndex+2]=="-" or validExpression[opIndex+2]=="+"):
-                            return CONSECUTIVE_OPERATORS
-                        elif validExpression[opIndex-1]=="+" and (validExpression[opIndex-2]=="-" or validExpression[opIndex-2]=="+"):
-                            CONSECUTIVE_OPERATORS
-                        elif validExpression[opIndex-1]=="+":
-                            validExpression[opIndex-1:opIndex+1]="-"
-                        elif validExpression[opIndex+1]=="-":
-                            validExpression[opIndex:opIndex+2]="+"
-                            print(validExpression)
-                         
-                        if validExpression[opIndex]=="-":
-                            computedValue = int(validExpression[opIndex-1])-int(validExpression[opIndex+1])
-                            validExpression[opIndex-1] = computedValue
-                            validExpression.pop(opIndex+1)
+                        if validExpression[opIndex] == "-":
+                            computedValue = float(validExpression[opIndex - 1]) - float(validExpression[opIndex + 1])
+                            validExpression[opIndex - 1] = computedValue
+                            validExpression.pop(opIndex + 1)
                             validExpression.pop(opIndex)
-                        
-                    
+
                     while (validExpression.count("+") > 0):
                         opIndex = validExpression.index("+")
-                        if validExpression[opIndex+1]=="+":
-                            return CONSECUTIVE_OPERATORS
-                        computedValue = int(validExpression[opIndex-1])+int(validExpression[opIndex+1])
-                        validExpression[opIndex-1] = computedValue
-                        validExpression.pop(opIndex+1)
+                        computedValue = float(validExpression[opIndex - 1]) + float(validExpression[opIndex + 1])
+                        validExpression[opIndex - 1] = computedValue
+                        validExpression.pop(opIndex + 1)
                         validExpression.pop(opIndex)
 
-                    answer=str(validExpression[0])
+                    answer = (validExpression[0], "")
 
                 else:
-                    answer="Expression cannot end with an operation"
+                    answer = (-1, ERROR_MESSAGES[2])
             else:
-                answer="Expression cannot begin with an operation"
+                answer = (-1, ERROR_MESSAGES[2])
         else:
-            answer="Not a valid input"
+            answer = (-1, ERROR_MESSAGES[1])
     else:
-        answer="No input was entered."
+        answer = (-1, ERROR_MESSAGES[0])
     return answer
 
+
 def Main():
-    while (1):
+    while (True):
         print("Enter an expression")
-        print(calculate(input()))
+        result = calculate(input())
+        print(result)
     # r=re.search(r"log","shsudflogfjswi")
     # if r():
     #     print("is there")
     # else:
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     Main()
