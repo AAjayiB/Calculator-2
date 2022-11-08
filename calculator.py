@@ -71,7 +71,7 @@ def evaluate(exp):
                             if i == ')':
                                 counter -= 1
                             if counter == 0:
-                                result = calculate(inBrackets)
+                                result = evaluate(inBrackets)
                                 if result[1] != "":
                                     return result
                                 break
