@@ -13,7 +13,7 @@ def calculate(exp):
             return -1, ERROR_MESSAGES[1]
         exp = exp.replace("log(", "$(")
         exp = exp.replace("exp(", "&(")
-        answer = calculate(exp)
+        answer = evaluate(exp)
     else:
         answer = (-1, ERROR_MESSAGES[0])
     return answer
@@ -143,7 +143,7 @@ def evaluate(exp):
 def Main():
     while (True):
         print("Enter an expression")
-        result = evaluate(input())
+        result = calculate(input())
         if result[1] == "":
             print(result[0])
         else:
