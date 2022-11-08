@@ -18,6 +18,23 @@ def calculate(exp):
                     if validExpression[0] =="-":
                         validExpression[0:2]=["".join(validExpression[0:2])]
 
+                    while (validExpression.count("^") > 0):
+                        opIndex = validExpression.index("^")
+                        if validExpression[opIndex-1]=="+" or validExpression[opIndex-1]=="-" or validExpression[opIndex-1]=="/" or validExpression[opIndex-1]=="^": 
+	                        return CONSECUTIVE_OPERATORS
+                        if (validExpression[opIndex+1]=="+" or validExpression[opIndex+1]=="*" or validExpression[opIndex+1]=="/" or validExpression[opIndex+1]=="^"):
+                            return CONSECUTIVE_OPERATORS
+                        if (validExpression[opIndex+1]=="+" or validExpression[opIndex+1]=="*") and (validExpression[opIndex+2]=="+" or validExpression[opIndex+2]=="-" or validExpression[opIndex+2]=="*" or validExpression[opIndex+2]=="/" or validExpression[opIndex+2]=="^"): 
+	                        return CONSECUTIVE_OPERATORS
+                        if validExpression[opIndex+1] =="-" and (validExpression[opIndex+2]=="+" or validExpression[opIndex+2]=="-" or validExpression[opIndex+2]=="*" or validExpression[opIndex+2]=="/" or validExpression[opIndex+2]=="^"): 
+	                        return CONSECUTIVE_OPERATORS
+                        if validExpression[opIndex+1] =="-":
+                            validExpression[opIndex+1:opIndex+3] = ["".join(validExpression[opIndex+1:opIndex+3])]
+                        computedValue = int(validExpression[opIndex-1])**int(validExpression[opIndex+1])
+                        validExpression[opIndex-1] = computedValue
+                        validExpression.pop(opIndex+1)
+                        validExpression.pop(opIndex)
+
                     while (validExpression.count("/") > 0):
                         opIndex = validExpression.index("/")
                         if validExpression[opIndex-1]=="+" or validExpression[opIndex-1]=="-" or validExpression[opIndex-1]=="/": 
