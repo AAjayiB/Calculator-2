@@ -22,16 +22,17 @@ def evaluate(exp):
 
 def calculate(exp):
     answer = (0, "")
+    exp = exp.replace(" ","")
 
     if exp:
         # checks for any non operators or digits
-        if not re.search(r"[^\d+\-\*\(\)/\$\&\.]", exp):
+        if not re.search(r"[^\d+\-\*\^\(\)/\$\&\.]", exp):
             # checks for expressions beginning only with a single minus or not
             if re.search(r"^\-?\d|\(", exp):
                 # checks for expressions ending with only digits
                 if re.search(r"\d|\)$", exp):
                     ############# ACTUAL OPERATIONS #############
-                    validExpression = re.findall(r"\d+\.?\d*|[+\-\*\(\)/\$\&]", exp)
+                    validExpression = re.findall(r"\d+\.?\d*|[+\-\*\^\(\)/\$\&]", exp)
                     ############# Here at the moment
                     if validExpression[0] == "-":
                         validExpression[0:2] = ["".join(validExpression[0:2])]
@@ -85,9 +86,22 @@ def calculate(exp):
                         validExpression.pop(opIndex)
                         validExpression[opIndex] = computedValue
 
+                    while (validExpression.count("^") > 0):
+                        opIndex = validExpression.index("^")
+                        computedValue = float(validExpression[opIndex-1])**float(validExpression[opIndex+1])
+                        validExpression[opIndex-1] = computedValue
+                        validExpression.pop(opIndex+1)
+                        validExpression.pop(opIndex)
+
+                    while (validExpression.count("/") > 0):
+                        opIndex = validExpression.index("/")
+                        computedValue = float(validExpression[opIndex-1])/float(validExpression[opIndex+1])
+                        validExpression[opIndex-1] = computedValue
+                        validExpression.pop(opIndex+1)
+                        validExpression.pop(opIndex)
+
                     while (validExpression.count("*") > 0):
                         opIndex = validExpression.index("*")
-
                         computedValue = float(validExpression[opIndex - 1]) * float(validExpression[opIndex + 1])
                         validExpression[opIndex - 1] = computedValue
                         validExpression.pop(opIndex + 1)

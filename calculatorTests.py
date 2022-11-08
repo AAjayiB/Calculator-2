@@ -13,7 +13,8 @@ def testCalculate():
     assert calculate("1+2+3+4")=="10"
     assert calculate("1*2*3*4")=="24"
     assert calculate("6-5-4-3")=="-6"
-    assert calculate("25/5")=="5"
+    assert calculate("25/5")=="5.0"
+    assert calculate("30/12")=="2.5"
     assert calculate("4^2")=="16"
     assert calculate("exp(4)")=="54.598"
     assert calculate("log(25)")=="3.219"
@@ -24,6 +25,8 @@ def testCalculate():
     assert calculate("6*2-7+4")=="9"
     assert calculate("8+1*1-9")=="0"
     assert calculate("99-24+9*4")=="111"
+    assert calculate("1+2-4/2")=="1"
+    assert calculate("2^2-4/2")=="2"
     assert calculate("exp(2+2)")=="54.598"
     assert calculate("log(5^2)")=="3.219"
 
@@ -56,7 +59,7 @@ def testCalculate():
     assert calculate("-2*-2")=="4"
     assert calculate("2*-2")=="-4"
     assert calculate("-2*3")=="-6"
-    assert calculate("3--2")="5"
+    assert calculate("3--2")=="5"
 
     # Tests for consecutive operators
     assert calculate("2+++2")==CONSECUTIVE_OPERATORS_ERROR
