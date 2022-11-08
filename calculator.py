@@ -5,7 +5,7 @@ ERROR_MESSAGES = ["No input was entered.", "Not a valid input", "Misplaced opera
 l = "log"
 
 
-def evaluate(exp):
+def calculate(exp):
     answer = (0, "")
 
     if exp:
@@ -19,7 +19,7 @@ def evaluate(exp):
     return answer
 
 
-def calculate(exp):
+def evaluate(exp):
     answer = (0, "")
     exp = exp.replace(" ","")
 
