@@ -113,8 +113,9 @@ def calculate(exp):
     return answer
 
 def Main():
-    print("Enter an expression")
-    print(calculate(input()))
+    while (1):
+        print("Enter an expression")
+        print(calculate(input()))
     # r=re.search(r"log","shsudflogfjswi")
     # if r():
     #     print("is there")
