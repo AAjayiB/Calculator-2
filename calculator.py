@@ -13,7 +13,7 @@ def calculate(exp):
             return ERROR_MESSAGES[1]
         exp = exp.replace("log(", "$(")
         exp = exp.replace("exp(", "&(")
-        answer = calculate(exp)
+        answer = evaluate(exp)
     else:
         answer = (-1, ERROR_MESSAGES[0])
     if answer[1]=="":
