@@ -146,7 +146,7 @@ def evaluate(exp):
 def Main():
     while (True):
         print("Enter an expression")
-        result = evaluate(input())
+        result = calculate(input())
         print(result)
     # r=re.search(r"log","shsudflogfjswi")
     # if r():
