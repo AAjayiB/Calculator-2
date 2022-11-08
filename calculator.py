@@ -2,7 +2,7 @@ import re, math
 
 ERROR_MESSAGES = ["No input was entered.", "Not a valid input", "Misplaced operators",
                   "Invalid string, contains consecutive operators", "Expression has mismatched brackets",
-                  "Cannot divide by 0"]
+                  "Cannot divide by zero"]
 l = "log"
 
 
