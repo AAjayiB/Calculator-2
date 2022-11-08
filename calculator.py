@@ -1,13 +1,14 @@
 import re, math
 
 ERROR_MESSAGES = ["No input was entered.", "Not a valid input", "Misplaced operators",
-                  "Invalid string, contains consecutive operators", "Expression has mismatched brackets"]
+                  "Invalid string, contains consecutive operators", "Expression has mismatched brackets",
+                  "Cannot divide by 0"]
 l = "log"
 
 
 def calculate(exp):
     answer = (0, "")
-    
+
     if exp:
         if re.search(r"[$&]", exp):
             return ERROR_MESSAGES[1]
@@ -16,15 +17,15 @@ def calculate(exp):
         answer = evaluate(exp)
     else:
         answer = (-1, ERROR_MESSAGES[0])
-    if answer[1]=="":
-        return round(float(answer[0]),3)
+    if answer[1] == "":
+        return round(float(answer[0]), 3)
     else:
         return answer[1]
 
 
 def evaluate(exp):
     answer = (0, "")
-    exp = exp.replace(" ","")
+    exp = exp.replace(" ", "")
 
     if exp:
         # checks for any non operators or digits
@@ -53,7 +54,7 @@ def evaluate(exp):
                                     return -1, ERROR_MESSAGES[3]
                         elif j != "(" and j != "&" and j != "$" and validExpression[i + 1] != ")" and \
                                 validExpression[i + 1] not in operators:
-                            toInsert.insert(0, i+1)
+                            toInsert.insert(0, i + 1)
                     for i in toPop:
                         validExpression.pop(i)
                     for i in toInsert:
@@ -71,7 +72,7 @@ def evaluate(exp):
                             if i == ')':
                                 counter -= 1
                             if counter == 0:
-                                result = calculate(inBrackets)
+                                result = evaluate(inBrackets)
                                 if result[1] != "":
                                     return result
                                 break
@@ -96,16 +97,18 @@ def evaluate(exp):
 
                     while (validExpression.count("^") > 0):
                         opIndex = validExpression.index("^")
-                        computedValue = float(validExpression[opIndex-1])**float(validExpression[opIndex+1])
-                        validExpression[opIndex-1] = computedValue
-                        validExpression.pop(opIndex+1)
+                        computedValue = float(validExpression[opIndex - 1]) ** float(validExpression[opIndex + 1])
+                        validExpression[opIndex - 1] = computedValue
+                        validExpression.pop(opIndex + 1)
                         validExpression.pop(opIndex)
 
                     while (validExpression.count("/") > 0):
                         opIndex = validExpression.index("/")
-                        computedValue = float(validExpression[opIndex-1])/float(validExpression[opIndex+1])
-                        validExpression[opIndex-1] = computedValue
-                        validExpression.pop(opIndex+1)
+                        if float(validExpression[opIndex + 1]) == 0.0:
+                            return (1, ERROR_MESSAGES[5])
+                        computedValue = float(validExpression[opIndex - 1]) / float(validExpression[opIndex + 1])
+                        validExpression[opIndex - 1] = computedValue
+                        validExpression.pop(opIndex + 1)
                         validExpression.pop(opIndex)
 
                     while (validExpression.count("*") > 0):
