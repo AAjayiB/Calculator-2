@@ -72,7 +72,7 @@ def testCalculate():
     
     # Test for brackets 
     assert calculate("100/(25-8)")==5.882
-    assert calculate("99*2^(exp(3)/log(15))")==16918.960
+    assert calculate("99*2^(exp(3)/log(15))")==16918.690
     # Tests for divison by 0
     assert calculate("5/0")==DIVIDE_BY_ZERO_ERROR
     assert calculate("12/(10-10)")==DIVIDE_BY_ZERO_ERROR
