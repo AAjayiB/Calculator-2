@@ -7,16 +7,19 @@ l = "log"
 
 def calculate(exp):
     answer = (0, "")
-
+    
     if exp:
         if re.search(r"[$&]", exp):
-            return -1, ERROR_MESSAGES[1]
+            return ERROR_MESSAGES[1]
         exp = exp.replace("log(", "$(")
         exp = exp.replace("exp(", "&(")
         answer = evaluate(exp)
     else:
         answer = (-1, ERROR_MESSAGES[0])
-    return answer
+    if answer[1]=="":
+        return round(float(answer[0]),3)
+    else:
+        return answer[1]
 
 
 def evaluate(exp):
@@ -144,10 +147,7 @@ def Main():
     while (True):
         print("Enter an expression")
         result = calculate(input())
-        if result[1] == "":
-            print(result[0])
-        else:
-            print(result[1])
+        print(result)
     # r=re.search(r"log","shsudflogfjswi")
     # if r():
     #     print("is there")
