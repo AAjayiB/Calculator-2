@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from calculator import evaluate
+from calculator import calculate
 
 app = Flask(__name__)
 
@@ -11,7 +11,7 @@ def index():
 def add2():
     output = request.form.to_dict()
     expression = output["expression"]
-    result= evaluate(expression)
+    result= calculate(expression)
     return render_template("index.html",result=result)
 
 if __name__ == "__main__":
