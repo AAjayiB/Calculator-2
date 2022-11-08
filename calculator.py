@@ -1,8 +1,7 @@
 import re, math
 
-ERROR_MESSAGES = ["No input was entered.", "Not a valid input", "Expression cannot begin with an operation",
-                  "Expression cannot end with an operation", "Invalid string, contains consecutive operators",
-                  "Expression has mismatched brackets"]
+ERROR_MESSAGES = ["No input was entered.", "Not a valid input", "Misplaced operators",
+                  "Invalid string, contains consecutive operators", "Expression has mismatched brackets"]
 l = "log"
 
 
@@ -48,7 +47,7 @@ def calculate(exp):
                                     validExpression[i + 2] = "-" + validExpression[i + 2]
                                     toPop.append(i + 1)
                                 else:
-                                    return -1, ERROR_MESSAGES[4]
+                                    return -1, ERROR_MESSAGES[3]
                         elif j != "(" and j != "&" and j != "$" and validExpression[i + 1] != ")" and \
                                 validExpression[i + 1] not in operators:
                             toInsert.insert(0, i+1)
@@ -75,7 +74,7 @@ def calculate(exp):
                                 break
                             inBrackets = inBrackets + i
                         if counter != 0:
-                            return [-1, ERROR_MESSAGES[5]]
+                            return [-1, ERROR_MESSAGES[4]]
                         for i in range(otherCounter):
                             validExpression.pop(opIndex)
                         validExpression.insert(opIndex, result[0])
@@ -131,9 +130,9 @@ def calculate(exp):
                     answer = (validExpression[0], "")
 
                 else:
-                    answer = (-1, ERROR_MESSAGES[3])
+                    answer = (-1, ERROR_MESSAGES[2])
             else:
-                answer = (-1, ERROR_MESSAGES[2])
+                answer = (-1, ERROR_MESSAGES[1])
         else:
             answer = (-1, ERROR_MESSAGES[1])
     else:
