@@ -1,8 +1,7 @@
 from calculator import calculate
 NO_INPUT_ERROR = "No input was entered."
 INVALID_INPUT_ERROR = "Not a valid input"
-OPERATION_END_ERROR = "Expression cannot end with an operation"
-OPERATION_BEGIN_ERROR = "Expression cannot begin with an operation"
+MISPLACED_OPERATORS = "Misplaced operators"
 CONSECUTIVE_OPERATORS_ERROR = "Invalid string, contains consecutive operators"
 DIVIDE_BY_ZERO_ERROR = "Cannot divide by zero"
 def testCalculate():
