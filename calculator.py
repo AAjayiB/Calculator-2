@@ -4,6 +4,7 @@ CONSECUTIVE_OPERATORS ="Invalid string, contains consecutive operators"
 l = "log"
 def calculate(exp):
     answer=""
+    exp = exp.replace(" ","")
 
     if exp:
         # checks for any non operators or digits
