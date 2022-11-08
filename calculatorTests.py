@@ -40,16 +40,16 @@ def testCalculate():
     assert calculate("log12")==INVALID_INPUT_ERROR
 
     # Tests for strings beginning and ending with an operation
-    assert calculate("1+2+3+")==OPERATION_END_ERROR
-    assert calculate("1+2+3*")==OPERATION_END_ERROR
-    assert calculate("1+2+3-")==OPERATION_END_ERROR
-    assert calculate("1+2+3/")==OPERATION_END_ERROR
-    assert calculate("+1+2+3")==OPERATION_BEGIN_ERROR
-    assert calculate("*1+2+3")==OPERATION_BEGIN_ERROR
-    assert calculate("--1+2+3")==OPERATION_BEGIN_ERROR
-    assert calculate("+-1+2+3")==OPERATION_BEGIN_ERROR
-    assert calculate("*-1+2+3")==OPERATION_BEGIN_ERROR
-    assert calculate("/1+9")==OPERATION_BEGIN_ERROR
+    assert calculate("1+2+3+")==MISPLACED_OPERATORS
+    assert calculate("1+2+3*")==MISPLACED_OPERATORS
+    assert calculate("1+2+3-")==MISPLACED_OPERATORS
+    assert calculate("1+2+3/")==MISPLACED_OPERATORS
+    assert calculate("+1+2+3")==MISPLACED_OPERATORS
+    assert calculate("*1+2+3")==MISPLACED_OPERATORS
+    assert calculate("--1+2+3")==MISPLACED_OPERATORS
+    assert calculate("+-1+2+3")==MISPLACED_OPERATORS
+    assert calculate("*-1+2+3")==MISPLACED_OPERATORS
+    assert calculate("/1+9")==MISPLACED_OPERATORS
     
     # Tests for negative numbers
     assert calculate("-2+1")==-1
