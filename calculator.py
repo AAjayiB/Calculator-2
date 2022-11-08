@@ -29,8 +29,8 @@ def evaluate(exp):
     if exp:
         # checks for any non operators or digits
         if not re.search(r"[^\d+\-\*\^\(\)/\$\&\.]", exp):
-            # checks for expressions beginning only with a single minus or not
-            if re.search(r"^\-?\d|\(", exp):
+            # checks for expressions beginning only with a opening bracket,single minus or not, and ends with a digit or closing bracket
+            if re.search(r"^\-?\d|\(", exp) and re.search(r"\d|\)$", exp):
                 # checks for expressions ending with only digits
                 if re.search(r"\d|\)$", exp):
                     ############# ACTUAL OPERATIONS #############
