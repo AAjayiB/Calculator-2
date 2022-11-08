@@ -38,6 +38,7 @@ def calculate(exp):
                         validExpression[0:2] = ["".join(validExpression[0:2])]
 
                     toPop = []
+                    toInsert = []
                     for i, j in enumerate(validExpression[:-1]):
                         operators = ["+", "*", "/", "^", "-"]
                         if j in operators:
@@ -48,8 +49,13 @@ def calculate(exp):
                                     toPop.append(i + 1)
                                 else:
                                     return -1, ERROR_MESSAGES[4]
+                        elif j != "(" and j != "&" and j != "$" and validExpression[i + 1] != ")" and \
+                                validExpression[i + 1] not in operators:
+                            toInsert.insert(0, i+1)
                     for i in toPop:
                         validExpression.pop(i)
+                    for i in toInsert:
+                        validExpression.insert(i, "*")
 
                     while (validExpression.count("(") > 0):
                         opIndex = validExpression.index("(")
